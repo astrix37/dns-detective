@@ -1,6 +1,6 @@
 {
 	"AWSTemplateFormatVersion": "2010-09-09",
-	"Description": "Create Lambda to add and remove instances from DNS",
+	"Description": "Create Lambda to add and remove instances from DNS!",
 	"Resources": {
 		"SNSContactMe":{
 	         "Type":"AWS::SNS::Topic",
@@ -35,7 +35,7 @@
 				"MemorySize" : "128",
 				"Role" : "arn:aws:iam::721306567870:role/alex-lambda-dns-detective",
 				"Runtime" : "python3.6",
-				"Timeout" : 60
+				"Timeout" : 61
 			}
 		},
 		"DnsDetectiveCWEvents": {
