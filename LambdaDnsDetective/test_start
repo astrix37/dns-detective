@@ -1,0 +1,59 @@
+{
+   "version":"0",
+   "id":"be1c129e-043c-1ce3-4a44-4655fb61e655",
+   "detail-type":"AWS API Call via CloudTrail",
+   "source":"aws.ec2",
+   "account":"721306567870",
+   "time":"2020-05-22T09:22:31Z",
+   "region":"ap-southeast-2",
+   "resources":[
+
+   ],
+   "detail":{
+      "eventVersion":"1.05",
+      "userIdentity":{
+         "type":"IAMUser",
+         "principalId":"AIDAIBCXNK3SG2ECWSUPE",
+         "arn":"arn:aws:iam::721306567870:user/smitty_app",
+         "accountId":"721306567870",
+         "accessKeyId":"AKIA2P4JYYS7KJCEADFZ",
+         "userName":"smitty_app"
+      },
+      "eventTime":"2020-05-22T09:22:31Z",
+      "eventSource":"ec2.amazonaws.com",
+      "eventName":"StartInstances",
+      "awsRegion":"ap-southeast-2",
+      "sourceIPAddress":"13.55.16.197",
+      "userAgent":"Boto3/1.13.6 Python/3.6.9 Linux/5.3.0-1017-aws Botocore/1.16.6",
+      "requestParameters":{
+         "instancesSet":{
+            "items":[
+               {
+                  "instanceId":"i-0b4751957f35e65f5"
+               }
+            ]
+         }
+      },
+      "responseElements":{
+         "requestId":"05ce8a16-a123-4f7d-98d5-af7348d181c2",
+         "instancesSet":{
+            "items":[
+               {
+                  "instanceId":"i-0b4751957f35e65f5",
+                  "currentState":{
+                     "code":16,
+                     "name":"running"
+                  },
+                  "previousState":{
+                     "code":16,
+                     "name":"running"
+                  }
+               }
+            ]
+         }
+      },
+      "requestID":"05ce8a16-a123-4f7d-98d5-af7348d181c2",
+      "eventID":"0b9bb738-49ef-483a-91bb-b8d18a43f05a",
+      "eventType":"AwsApiCall"
+   }
+}

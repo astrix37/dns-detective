@@ -1,0 +1,82 @@
+{
+	"AWSTemplateFormatVersion": "2010-09-09",
+	"Description": "Create Lambda to add and remove instances from DNS",
+	"Resources": {
+		"SNSContactMe":{
+	         "Type":"AWS::SNS::Topic",
+	         "Properties":{
+	            "DisplayName": "DNSDetectiveAlert",
+	            "Subscription":[
+	               {
+	                  "Endpoint":"alexander.colvin@hotmail.com",
+	                  "Protocol":"email"
+	               }
+	            ],
+	            "TopicName": "DNSDetectiveAlert"
+	        }
+        },
+		"LambdaDnsDetective": {
+			"DependsOn" : "SNSContactMe",
+			"Type": "AWS::Lambda::Function",
+			"Properties": {
+				"Code":{
+					"S3Bucket":"astrix37-artifacts",
+					"S3Key":"tbc"
+				},
+				"Description" : "Lambda to add and remove instances from DNS",
+				"Environment" : {
+					"Variables": {
+						"VaildDomains": "cjgamer.com",
+						"AlertSNS": {"Ref": "SNSContactMe"}
+					}
+				},
+				"FunctionName" : "alex-dns-detective",
+				"Handler" : "lambda_entry.lambda_handler",
+				"MemorySize" : "128",
+				"Role" : "arn:aws:iam::721306567870:role/alex-lambda-dns-detective",
+				"Runtime" : "python3.6",
+				"Timeout" : 60
+			}
+		},
+		"DnsDetectiveCWEvents": {
+			"DependsOn" : "LambdaDnsDetective",
+			"Type": "AWS::Events::Rule",
+			"Properties": {
+				"Description": "Listen for instance start/stop events to determine if they should be added/removed from DNS",
+				"EventPattern": {
+					"source": [
+						"aws.ec2"
+					],
+					"detail-type": [
+						"AWS API Call via CloudTrail"
+					],
+					"detail": {
+						"eventSource": [
+							"ec2.amazonaws.com"
+						],
+						"eventName": [
+							"StartInstances",
+							"StopInstances"
+						]
+					}
+				},
+				"Name": "alex-dns-detective-events",
+				"Targets": [{
+						"Arn": {"Fn::GetAtt": ["LambdaDnsDetective", "Arn"]},
+						"Id": "detective-target"
+					}
+				]
+			}
+		},
+		"InvokeDnsDetectivePermissions": {
+			"DependsOn" : ["LambdaDnsDetective", "DnsDetectiveCWEvents"],
+			"Type": "AWS::Lambda::Permission",
+			"Properties": {
+				"Action" : "lambda:InvokeFunction",
+				"FunctionName" : "alex-dns-detective",
+				"Principal" : "events.amazonaws.com",
+				"SourceArn" : {"Fn::GetAtt": ["DnsDetectiveCWEvents", "Arn"]}
+			}
+		}
+	}
+}
